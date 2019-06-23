@@ -72,11 +72,8 @@ class MediumPost(scrapy.Spider):
         tds_cookie={
                                '__cfduid':'d74571b7cc34a03a824fa032112ad94af1522260237',
  '_ga':'GA1.2.113405192.1522260242',
- 'uid':'7bbdad3b3571',
- #'sid': '1:DwJl0+iLALCggauelHDqXaaw7GG3ipuiZ0iUd4DDteP+F/lt6J/3sxYV+VXy+XIT',
- #'sid':'1:tI92Vf9R8FBe+aBWRN2n4VLtYH8xR3jxhQBUClCSvyxSzPBloyxi3xhigLCTd6yh',
- #'sid':'1:8SPoQh4B4P7f/DbVWt6lDvHo6t2UAQlTiJUUdMUkIAectgJOw7aqFEQ5eKcB0BJV',
- #'sid':'1:DKSJT0fPDKWWprJzaIUVOAQVryMSZMnXdj/qQqVBWYIZT4/5l6U/M0QT8Rx4uKqW32dmeh1o2JmwlhZZZW8Z/g==',
+ 'uid':uid,
+ 'sid': sid
  'lightstep_guid/medium-web':'e64e13b22fb98a54',
  'lightstep_session_id':'39dc1b5e47a62082',
  'pr':'2', 
@@ -95,8 +92,8 @@ class MediumPost(scrapy.Spider):
         cookie={
                                '__cfduid':'d74571b7cc34a03a824fa032112ad94af1522260237',
  '_ga':'GA1.2.1247018129.1539972035',
- 'uid':'7bbdad3b3571',
- 'sid':'1:DwJl0+iLALCggauelHDqXaaw7GG3ipuiZ0iUd4DDteP+F/lt6J/3sxYV+VXy+XIT',
+ 'uid':uid,
+ 'sid':sid',
  'lightstep_guid/medium-web':'6e80f904c2ad8a05',
  'lightstep_session_id':'2cc53cae85a476ca',
  'pr':'2', 
