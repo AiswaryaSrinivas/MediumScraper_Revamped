@@ -6,10 +6,31 @@ Created on Tue May  1 23:30:54 2018
 
 This scrapper extracts data for a given date and a given tag
 
-scrapy runspider -a start_date=20180901 -a end_date=20180930 -a tagSlug='machine-learning' -a folder=machinelearning medium_scrapper_tag_archive.py
+scrapy crawl -a start_date=20170901 -a end_date=20180930 -a tagSlug='machine-learning data-science artificial-intelligence ai' -o "data//medium_scrapper_%(item_name)s.csv" -t csv  medium_scrapper 
 
-scrapy crawl -a start_date=20180929 -a end_date=20180930 -a tagSlug='machine-learning' medium_scrapper  -o test.csv
-scrapy crawl -a start_date=20180929 -a end_date=20180930 -a tagSlug='machine-learning' -o "medium_scrapper_%(item_name)s.csv" -t csv  medium_scrapper 
+scrapy crawl -o"data//medium_scrapper_content_HackerNoon%(item_name)s.csv" -t csv medium_scrapper_content
+
+
+scrapy crawl -a start_date=20180820 -a end_date=20180820 -a tagSlug='machine-learning' -o "data//medium_scrapper_%(item_name)s.csv" -t csv  medium_scrapper 
+
+https://medium.com/s/story/machine-learning-to-predict-taxi-fare-part-two-predictive-modelling-f80461a8072e
+
+ '''
+        if response.status==302:
+          
+            print("redirecting")
+            
+            url=response.headers['Location'].decode('utf-8')    
+            r=requests.get(url)
+            data=r.text
+            data_split=data.split('<![CDATA[\nwindow["obvInit"](')
+            data=data_split[len(data_split)-1]
+            data=data.split(")\n// ]]>")[0]
+            dat=demjson.decode(data)
+            
+            dat_final=json.dumps(str(dat))
+            writeTofile(folder_path+str(post_id)+"_"+str(tag)+".json",dat_final)
+        '''  
 """
 
 import scrapy
@@ -20,8 +41,11 @@ from datetime import timedelta
 import os
 from medium.items import PostsItem,TagsItem,UserItem,CollectionItem,ContentItem
 from medium.utilities import Medium
-
-
+import requests
+from bs4 import BeautifulSoup
+from codecs import raw_unicode_escape_decode
+import demjson
+import pandas as pd
 def writeTofile(fileName,text):
     with codecs.open(fileName,'w','utf-8') as outfile:
         outfile.write(text)
@@ -33,9 +57,12 @@ class MediumPost(scrapy.Spider):
     autothrottle_start_delay=10
     autothrottle_enabled=True
     def start_requests(self):
-        
-        start_urls = ['https://medium.com/tag/'+self.tagSlug.strip("'")+'/archive/']
-        #print start_urls
+        tagSlug=self.tagSlug.strip("'")
+        tags=tagSlug.split()
+        start_urls=[]
+        for tag in tags:
+            start_urls.append('https://medium.com/tag/'+tag+'/archive/')
+        #print(start_urls)
         
         cookie={
                                 '__cfduid':'da03ee0d47b0f9fc62cd620eb2e19740d1525156135',
@@ -75,7 +102,10 @@ class MediumPost(scrapy.Spider):
             d=datetime.strftime(startDate+timedelta(days=i),'%Y/%m/%d')
             for url in start_urls:
                 #print url+d
-                yield scrapy.Request(url+d,method="GET",headers=header,cookies=cookie,callback=self.parse,meta={'reqDate':d})
+                tag=url.replace("/archive/","")
+                tag=tag.replace("https://medium.com/tag/","")
+                
+                yield scrapy.Request(url+d,method="GET",headers=header,cookies=cookie,callback=self.parse,meta={'reqDate':d,'tag':tag})
         
         #for url in start_urls:
             #yield scrapy.Request(url,method='GET',headers=header,cookies=cookie,callback=self.parse)
@@ -83,23 +113,30 @@ class MediumPost(scrapy.Spider):
     
     
 
+    
         
     def parse_story(self,response):
+        
         response_data=response.text
         response_split=response_data.split("while(1);</x>")
         response_data=response_split[1]
+        #header=response.meta['id']
+        #cookie=response.meta['cookie']
         post_id=response.meta['id']
-        scrappedDate=response.meta['folderpath']
         folder_path=response.meta['folderpath']+"//text//"
-        
+        tag=response.meta['tag']
+        scrappedDate=response.meta['folderpath']
         if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
-        writeTofile(folder_path+str(post_id)+".json",response_data)   
-        medium=Medium(folder_path+str(post_id)+".json")
+            os.makedirs(folder_path)        
+        
+        
+        writeTofile(folder_path+str(post_id)+"_"+str(tag)+".json",response_data)   
+        medium=Medium(folder_path+str(post_id)+"_"+str(tag)+".json")
         
         data=medium.getJsonResponse()
         contentitem=ContentItem()
         contentitem=medium.processContent(data,contentitem)
+        contentitem['postId']=post_id
         contentitem['scrappedDate']=scrappedDate
         contentitem['url']=response.meta['url']
         yield contentitem
@@ -109,22 +146,27 @@ class MediumPost(scrapy.Spider):
     
     def parse(self,response):
         response_data=response.text
-        
+        if response.status==302:
+            writeTofile("GatewayException.txt",response.text)
+            #print(response.text)
             
         response_split=response_data.split("while(1);</x>")
-        response_data=response_split[1]
+        if len(response_split)>1:
+            response_data=response_split[1]
+        
         date_post=response.meta['reqDate']
         date_post=date_post.replace("/","")
         #directory=response.meta['folder']
         directory=datetime.now().strftime("%Y%m%d")
         scrappedDate=directory
         if response.status==504:
-            writeTofile("GatewayException.txt",self.tagSlug.replace("-","").strip("'")+"Tag"+date_post+"\n")
+            writeTofile("GatewayException.txt",tag.replace("-","").strip("'")+"Tag"+date_post+"\n")
         if not os.path.exists(directory):
             os.makedirs(directory)
-        file_path=directory+"//"+self.tagSlug.replace("-","").strip("'")+"Tag"+date_post+".json"
+        tag=response.meta['tag']
+        file_path=directory+"//"+tag.replace("-","").strip("'")+"Tag"+date_post+".json"
         
-        writeTofile(directory+"//"+self.tagSlug.replace("-","").strip("'")+"Tag"+date_post+".json",response_data)
+        writeTofile(directory+"//"+tag.replace("-","").strip("'")+"Tag"+date_post+".json",response_data)
         #Check if the status in json file is success. 
         
         cookie={
@@ -187,13 +229,13 @@ class MediumPost(scrapy.Spider):
                     #post_dict=medium.processPost(post[pid],postitem)
                     
                     postitem=medium.processPost(posts[pid],postitem)
-                    postitem['searchTag']=self.tagSlug
+                    postitem['searchTag']=response.meta['tag']
                     postitem['scrappedDate']=directory   
                     
                     uniqueSlug=postitem['uniqueSlug']
                     if uniqueSlug!='':
                         url="https://medium.com/s/story/"+uniqueSlug
-                        yield scrapy.Request(url,method="GET",headers=header,cookies=cookie,callback=self.parse_story,meta={'id':pid,'folderpath':directory,'url':url})
+                        yield scrapy.Request(url,method="GET",headers=header,cookies=cookie,callback=self.parse_story,meta={'id':pid,'folderpath':directory,'url':url,'tag':response.meta['tag']})
             # For each postId get the other fields from Json 
                     
                     yield postitem
