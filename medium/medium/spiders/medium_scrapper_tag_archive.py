@@ -65,20 +65,7 @@ class MediumPost(scrapy.Spider):
         #print(start_urls)
         
         cookie={
-                                '__cfduid':'da03ee0d47b0f9fc62cd620eb2e19740d1525156135',
-                                '_ga':'GA1.2.1177081718.1525156137',
-                                '_gid':'GA1.2.1879325541.1525156137',
-                                'lightstep_guid/medium-web':'288180d9401c5407',
-                                'lightstep_session_id':'fc3f8a3ecff727b0',
-                                'pr':'1.25',
-                                'tz':'-330', 
-                                'uid':uid,
-                                'sid':sid,
-                                'xsrf':'hBL2qH8I5ckb',
-                                'xsrf':'kir9Fl-1QBDt7ZZT', 
-                                '__cfruid':'7d89b52dc669786052af0fed2fa8785ca30e374f-1525197176',
-                                'sz':'674'
-                                  }
+                                  } ## set your own cookie
         header = {
                         'accept': 'application/json',
                         'accept-encoding': 'gzip, deflate, br',
