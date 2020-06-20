@@ -67,59 +67,21 @@ class MediumPost(scrapy.Spider):
         #start_urls = ['https://medium.com/tag/'+self.tagSlug.strip("'")+'/archive/']
         print(len(start_urls))
         
-        #Towards Data Science Cookie
+        #Towards Data Science Cookie, set your own
         
         tds_cookie={
-                               '__cfduid':'d74571b7cc34a03a824fa032112ad94af1522260237',
- '_ga':'GA1.2.113405192.1522260242',
- 'uid':uid,
- 'sid': sid
- 'lightstep_guid/medium-web':'e64e13b22fb98a54',
- 'lightstep_session_id':'39dc1b5e47a62082',
- 'pr':'2', 
- 'tz':'-330',
- 'lightstep_guid/lite-web':'1a533fe15c9c46c8',
- '_gid':'GA1.2.1151037376.1538835202',
- 'xsrf':'GkW4aZZB3TvA72jQ',
- '_parsely_session':'{%22sid%22:84%2C%22surl%22:%22https://towardsdatascience.com/a-data-science-for-good-machine-learning-project-walk-through-in-python-part-one-1977dd701dbc%22%2C%22sref%22:%22%22%2C%22sts%22:1541615052543%2C%22slts%22:1541609666358}; _parsely_visitor={%22id%22:%22pid=3b6e4394824702274089e2bcbabd0a63%22%2C%22session_count%22:84%2C%22last_session_ts%22:1541615052543}', 
- 'sz':'792'
+                              
  }
         #HackerNoon Cookie
         
-        wearefuturegov_sid='1:/7IrChqirJ31pM0ODUbLgECatf1jvZMoV0mkv/efG/BnNIjTTGJIEOI8pUt7055pwygX3ihHRPsAlJ9ndn19Vg=='
-        markgrowth_sid='1:YwxbJRr2Kqp3Ta86BWmvyvYDPW3lMaqwEYf7C3KumwqFFeXBKDbt1WmFkNiNKr4t'
-        hackernoon_sid="1:DwJl0+iLALCggauelHDqXaaw7GG3ipuiZ0iUd4DDteP+F/lt6J/3sxYV+VXy+XIT"
-        cookie={
-                               '__cfduid':'d74571b7cc34a03a824fa032112ad94af1522260237',
- '_ga':'GA1.2.1247018129.1539972035',
- 'uid':uid,
- 'sid':sid',
- 'lightstep_guid/medium-web':'6e80f904c2ad8a05',
- 'lightstep_session_id':'2cc53cae85a476ca',
- 'pr':'2', 
- 'tz':'-330',
- 'lightstep_guid/lite-web':'1a533fe15c9c46c8',
- '_gid':'GA1.2.1151037376.1538835202',
- 'xsrf':'J4gwC2lOfTOIdUCA',
- '_parsely_session':'{%22sid%22:8%2C%22surl%22:%22https://hackernoon.com/numpy-with-python-for-data-science-16ff2f646591%22%2C%22sref%22:%22%22%2C%22sts%22:1541618234349%2C%22slts%22:1541270584773}; _parsely_visitor={%22id%22:%22pid=3b6e4394824702274089e2bcbabd0a63%22%2C%22session_count%22:8%2C%22last_session_ts%22:1541618234349}', 
- 'sz':'556'        
+       #set  your owu 
+        cookie={   
         
                                   }
         
                                   
         header = {
-                        'accept': 'application/json',
-                        'accept-encoding': 'gzip, deflate, br',
-                        'accept-language': 'en-US,en;q=0.9,ta;q=0.8',
-                        'content-type': 'application/json',
-                        'referer': 'https://medium.com/',
-                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
-                        'x-client-date': '1525197603242',
-                        'x-obvious-cid': 'web',
-                        'x-opentracing': '{"ot-tracer-spanid":"4f6cec2cae2d3","ot-tracer-traceid":"10856221151cfe","ot-tracer-sampled":"true"}',
-                        'x-xsrf-token': 'wpVeJB2qz9QG',
-                        'path': '/numpy-with-python-for-data-science-16ff2f646591',
-                        'authority':'hackernoon.com'
+                     
         }   
         #start_date=self.start_date
         #end_date=self.end_date
