@@ -67,17 +67,8 @@ class MediumPost(scrapy.Spider):
         cookie={
                                   } ## set your own cookie
         header = {
-                        'accept': 'application/json',
-                        'accept-encoding': 'gzip, deflate, br',
-                        'accept-language': 'en-US,en;q=0.9,ta;q=0.8',
-                        'content-type': 'application/json',
-                        'referer': 'https://medium.com/tag/data-science/archive/2018/03/23',
-                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
-                        'x-client-date': '1525197603242',
-                        'x-obvious-cid': 'web',
-                        'x-opentracing': '{"ot-tracer-spanid":"1cbe927d0f29e9","ot-tracer-traceid":"8f0a5b5308eab","ot-tracer-sampled":"true"}',
-                        'x-xsrf-token': 'hBL2qH8I5ckb'
-        }   
+                       
+        }   ## set yoir own header
         #start_date=self.start_date
         #end_date=self.end_date
         startDate=datetime.strptime(self.start_date,"%Y%m%d")
